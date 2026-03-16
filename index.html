@@ -299,8 +299,378 @@ html{scroll-behavior:smooth}
 body{background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none}
 #cur{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:8000;transform:translate(-50%,-50%);transition:transform .12s}
 #ring{position:fixed;width:32px;height:32px;border:1px solid rgba(184,146,58,.35);border-radius:50%;pointer-events:none;z-index:7999;transform:translate(-50%,-50%)}
+/* EDIT PANEL */
+#edit-fab{position:fixed;bottom:28px;right:28px;z-index:6000;background:var(--gold);color:var(--ink);border:none;padding:14px 22px;font-family:'DM Sans',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 32px rgba(184,146,58,.4);transition:all .25s}
+#edit-fab:hover{background:var(--gold-l);transform:translateY(-2px)}
+#edit-panel{position:fixed;top:0;right:-460px;width:440px;height:100vh;background:#121212;border-left:1px solid rgba(184,146,58,.18);z-index:5999;overflow-y:auto;transition:right .35s cubic-bezier(.4,0,.2,1);font-family:'DM Sans',sans-serif}
+#edit-panel.open{right:0}
+.ep-hd{background:var(--gold);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.ep-hd h3{color:var(--ink);font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.ep-hd button{background:none;border:none;color:var(--ink);font-size:1.5rem;cursor:pointer;line-height:1;padding:0 4px}
+.ep-body{padding:18px}
+.ep-note{font-size:.64rem;color:rgba(245,240,235,.35);line-height:1.65;padding:10px 14px;background:rgba(245,240,235,.03);border-left:2px solid rgba(184,146,58,.3);margin-bottom:16px;border-radius:0 2px 2px 0}
+.ep-acc{margin-bottom:5px;border:1px solid rgba(245,240,235,.07);border-radius:3px;overflow:hidden}
+.ep-acc-hd{background:rgba(245,240,235,.03);padding:11px 15px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.ep-acc-hd span:first-child{font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.ep-arr{color:rgba(245,240,235,.4);font-size:.65rem;transition:transform .25s}
+.ep-acc-hd.open .ep-arr{transform:rotate(180deg)}
+.ep-acc-bd{display:none;padding:14px;border-top:1px solid rgba(245,240,235,.05)}
+.ep-acc-bd.show{display:block}
+.ep-f{margin-bottom:11px}
+.ep-lbl{display:block;font-size:.57rem;letter-spacing:.17em;text-transform:uppercase;color:rgba(245,240,235,.38);margin-bottom:4px}
+.ep-inp,.ep-ta{width:100%;background:rgba(245,240,235,.04);border:1px solid rgba(245,240,235,.09);color:#f5f0eb;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:.76rem;border-radius:2px;outline:none;transition:border-color .2s}
+.ep-inp:focus,.ep-ta:focus{border-color:rgba(184,146,58,.5)}
+.ep-ta{resize:vertical;min-height:60px;line-height:1.5}
+.ep-file-lbl{display:block;width:100%;padding:9px;background:rgba(184,146,58,.08);border:1px dashed rgba(184,146,58,.3);color:var(--gold);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;text-align:center;cursor:pointer;border-radius:2px;transition:all .2s}
+.ep-file-lbl:hover{background:rgba(184,146,58,.15);border-color:rgba(184,146,58,.5)}
+.ep-file{display:none}
+.ep-apply{width:100%;margin-top:10px;padding:11px;background:var(--gold);color:var(--ink);border:none;font-family:'DM Sans',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:background .2s}
+.ep-apply:hover{background:var(--gold-l)}
+.ep-divider{height:1px;background:rgba(245,240,235,.06);margin:10px 0}
+.ep-grp{background:rgba(245,240,235,.02);border:1px solid rgba(245,240,235,.06);padding:12px;border-radius:3px;margin-bottom:10px}
+.ep-grp-lbl{font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:block}
+#flash{position:fixed;bottom:86px;right:28px;background:var(--gold);color:var(--ink);padding:9px 16px;font-size:.68rem;font-weight:700;letter-spacing:.1em;z-index:9999;border-radius:2px;opacity:0;transition:opacity .4s;pointer-events:none}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:600;padding:18px 56px;display:flex;align-items:center;justify-content:space-between}
+nav::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,12,12,.94),transparent);z-index:-1;pointer-events:none}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:1rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;font-weight:700}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,235,.4);text-decoration:none;transition:color .25s}
+.nav-links a:hover{color:var(--gold)}
+/* HERO */
+#hero{min-height:100vh;display:grid;grid-template-columns:55% 45%;position:relative;overflow:hidden}
+.hero-l{display:flex;flex-direction:column;justify-content:center;padding:130px 56px 110px;position:relative;z-index:2}
+.hero-kicker{display:flex;align-items:center;gap:14px;margin-bottom:26px;opacity:0;animation:up .8s .2s forwards}
+.hero-kicker::before{content:'';width:30px;height:1px;background:var(--gold)}
+.hero-kicker span{font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,104px);font-weight:700;line-height:.88;letter-spacing:-.02em;margin-bottom:30px;opacity:0;animation:up .9s .35s forwards}
+.hero-h1 i{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:.7rem;letter-spacing:.17em;text-transform:uppercase;color:var(--dust);margin-bottom:50px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;opacity:0;animation:up .8s .5s forwards}
+.hero-sub .dot{width:3px;height:3px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.hero-cta{display:inline-flex;align-items:center;gap:12px;text-decoration:none;font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;color:var(--paper);border-bottom:1px solid rgba(184,146,58,.3);padding-bottom:5px;width:fit-content;transition:all .3s;opacity:0;animation:up .8s .65s forwards}
+.hero-cta:hover{color:var(--gold);gap:20px;border-color:var(--gold)}
+.hero-r{position:relative;overflow:hidden}
+.hero-photo{position:absolute;inset:0}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;filter:brightness(.72) contrast(1.08);display:block}
+.hero-photo-veil{position:absolute;inset:0;background:linear-gradient(to right,var(--ink) 0%,rgba(12,12,12,.3) 50%,transparent 80%),linear-gradient(to top,var(--ink) 0%,transparent 28%)}
+.hero-word{position:absolute;bottom:-50px;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,13vw,170px);color:rgba(245,240,235,.018);white-space:nowrap;pointer-events:none;letter-spacing:.06em;z-index:1}
+.stat-bar{position:absolute;bottom:0;left:0;right:0;z-index:3;display:flex;border-top:1px solid var(--line);background:rgba(12,12,12,.65);backdrop-filter:blur(16px)}
+.sbar{flex:1;padding:20px 26px;border-right:1px solid var(--line);opacity:0;animation:up .7s forwards}
+.sbar:last-child{border-right:none}
+.sbar:nth-child(1){animation-delay:.7s}.sbar:nth-child(2){animation-delay:.85s}.sbar:nth-child(3){animation-delay:1s}.sbar:nth-child(4){animation-delay:1.15s}
+.sbar-n{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:700;color:var(--gold);line-height:1}
+.sbar-l{font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dust);margin-top:3px}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.sec{padding:106px 0}
+.wrap{max-width:1240px;margin:0 auto;padding:0 56px}
+.sec-hd{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:62px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.sec-eye{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.sec-ttl{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4vw,52px);font-weight:700;line-height:.9;letter-spacing:-.02em}
+.sec-ttl i{font-style:italic;color:var(--gold)}
+.sec-side{font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;color:var(--dust);max-width:240px;text-align:right;line-height:1.9}
+/* ABOUT */
+#about{background:var(--ink)}
+.about-cols{display:grid;grid-template-columns:1fr 1.12fr;gap:70px;align-items:center}
+.about-img-wrap{position:relative}
+.about-img-wrap img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.about-deco{position:absolute;top:16px;left:16px;right:-16px;bottom:-16px;border:1px solid rgba(184,146,58,.18);z-index:-1}
+.about-pull{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.3vw,27px);line-height:1.45;margin-bottom:22px;font-weight:600}
+.about-pull i{font-style:italic;color:var(--gold)}
+.about-body{font-size:.83rem;line-height:1.95;color:var(--dust)}
+/* EDU */
+#edu{background:#0f0f0f;padding-top:72px;padding-bottom:72px}
+.edu-row{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.edu-card{background:rgba(245,240,235,.02);padding:40px 36px;border:1px solid var(--line);position:relative;overflow:hidden;transition:background .3s,border-color .3s}
+.edu-card::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--gold);transition:width .45s}
+.edu-card:hover::after{width:100%}
+.edu-yr{font-family:'Bebas Neue',sans-serif;font-size:5rem;color:rgba(184,146,58,.08);line-height:1;margin-bottom:12px}
+.edu-deg{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;line-height:1.2;margin-bottom:6px}
+.edu-inst{font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dust)}
+/* SKILLS */
+#skills{background:var(--ink)}
+.skills-cols{display:grid;grid-template-columns:.65fr 1.35fr;gap:70px;align-items:start}
+.skills-quote{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;line-height:1.8;color:var(--dust);border-left:2px solid var(--gold);padding-left:20px}
+.tags{display:flex;flex-wrap:wrap;gap:9px}
+.tag{padding:11px 20px;border:1px solid rgba(245,240,235,.1);font-size:.67rem;letter-spacing:.13em;text-transform:uppercase;color:var(--paper);position:relative;overflow:hidden;transition:color .25s,border-color .25s;cursor:default}
+.tag::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s;z-index:-1}
+.tag:hover{color:var(--ink);border-color:var(--gold)}
+.tag:hover::before{transform:scaleX(1)}
+.tag.hi{border-color:var(--gold);color:var(--gold)}
+.tag.hi:hover{color:var(--ink)}
+/* EXP */
+#exp{background:#090909}
+.exp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
+.exp-card{background:rgba(245,240,235,.02);padding:34px;border:1px solid var(--line);transition:background .3s,border-color .3s}
+.exp-card:hover{background:rgba(245,240,235,.04);border-color:rgba(184,146,58,.18)}
+.exp-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.exp-yt{
+  width:44px;height:44px;
+  background:#FF0000;
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  box-shadow:0 3px 12px rgba(255,0,0,.35);
+  transition:transform .2s, box-shadow .2s;
+}
+.exp-card:hover .exp-yt{transform:scale(1.08);box-shadow:0 5px 18px rgba(255,0,0,.5)}
+.exp-yt svg{width:22px;height:22px;fill:#ffffff}
+.exp-count{text-align:right}
+.exp-count-n{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);line-height:1}
+.exp-count-l{font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dust)}
+.exp-name{font-family:'Cormorant Garamond',serif;font-size:1.18rem;font-weight:700;margin-bottom:7px}
+.exp-desc{font-size:.77rem;line-height:1.82;color:var(--dust);margin-bottom:20px}
+.exp-link{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(184,146,58,.25);padding-bottom:3px;transition:gap .3s}
+.exp-link:hover{gap:14px}
+/* PROJECTS */
+#proj{background:var(--ink)}
+.proj-lede{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.9vw,19px);font-style:italic;color:var(--dust);max-width:560px;margin-bottom:50px;line-height:1.7}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:34px}
+.proj-card{position:relative;overflow:hidden;background:#111;aspect-ratio:9/14;display:block;text-decoration:none;color:inherit}
+.proj-img{width:100%;height:100%;object-fit:cover;transition:transform .7s,filter .55s;filter:brightness(.6) saturate(.85)}
+.proj-card:hover .proj-img{transform:scale(1.08);filter:brightness(.85) saturate(1)}
+.proj-veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,12,12,.97) 0%,rgba(12,12,12,.2) 55%,transparent 80%);display:flex;flex-direction:column;justify-content:flex-end;padding:22px 20px}
+.proj-badge{display:inline-flex;background:var(--gold);color:var(--ink);font-size:.49rem;letter-spacing:.17em;text-transform:uppercase;font-weight:700;padding:5px 10px;margin-bottom:9px;width:fit-content}
+.proj-ttl{font-family:'Cormorant Garamond',serif;font-size:.92rem;font-weight:700;line-height:1.3;margin-bottom:4px}
+.proj-sub-txt{font-size:.6rem;color:var(--dust)}
+.proj-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.72);opacity:0;transition:all .3s;width:52px;height:52px;background:rgba(184,146,58,.88);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.proj-play svg{fill:var(--ink);width:16px;height:16px;margin-left:3px}
+.proj-card:hover .proj-play{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap}
+.btn-g{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:var(--gold);color:var(--ink);text-decoration:none;font-size:.62rem;letter-spacing:.17em;text-transform:uppercase;font-weight:600;transition:background .25s}
+.btn-g:hover{background:var(--gold-l)}
+.btn-o{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;border:1px solid rgba(245,240,235,.14);color:var(--paper);text-decoration:none;font-size:.62rem;letter-spacing:.17em;text-transform:uppercase;transition:all .25s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+/* CREATIVE */
+#creative{background:#080808}
+.c-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.c-card{position:relative;aspect-ratio:4/3;overflow:hidden;background:#111;display:block;text-decoration:none;color:inherit}
+.c-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s,filter .5s;filter:brightness(.55) saturate(.7)}
+.c-card:hover img{transform:scale(1.1);filter:brightness(.82) saturate(1)}
+.c-info{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:15px;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,transparent 58%)}
+.c-ttl{font-family:'Cormorant Garamond',serif;font-size:.8rem;font-weight:700;line-height:1.3;margin-bottom:2px;transform:translateY(5px);transition:transform .3s}
+.c-card:hover .c-ttl{transform:translateY(0)}
+.c-art{font-size:.55rem;letter-spacing:.07em;color:var(--dust);transform:translateY(5px);opacity:0;transition:all .3s .04s}
+.c-card:hover .c-art{transform:translateY(0);opacity:1}
+.c-ply{position:absolute;top:9px;right:9px;width:27px;height:27px;background:rgba(184,146,58,.82);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.78);transition:all .28s}
+.c-card:hover .c-ply{opacity:1;transform:scale(1)}
+.c-ply svg{fill:var(--ink);width:10px;height:10px;margin-left:2px}
+/* BRAND */
+#brand{background:var(--ink)}
+.brand-top{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;margin-bottom:52px}
+.brand-q{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.1vw,22px);line-height:1.52}
+.brand-q i{font-style:italic;color:var(--gold)}
+.brand-pills{display:flex;flex-wrap:wrap;gap:10px}
+.brand-pill{padding:8px 17px;border:1px solid rgba(245,240,235,.1);font-size:.58rem;letter-spacing:.17em;text-transform:uppercase;color:var(--dust)}
+.brand-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:26px}
+.b-card{background:#111;overflow:hidden}
+.b-inner{aspect-ratio:9/14;position:relative;overflow:hidden;display:block;text-decoration:none}
+.b-inner img{width:100%;height:100%;object-fit:cover;transition:transform .65s,filter .5s;filter:brightness(.55)}
+.b-inner:hover img{transform:scale(1.07);filter:brightness(.82)}
+.b-veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.96) 0%,rgba(0,0,0,.22) 50%,transparent 75%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.b-name{font-family:'Cormorant Garamond',serif;font-size:.88rem;font-weight:700;margin-bottom:3px}
+.b-sub{font-size:.58rem;letter-spacing:.07em;color:var(--dust)}
+.b-badge{display:inline-block;margin-top:10px;background:var(--gold);color:var(--ink);font-size:.47rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700;padding:4px 9px}
+/* ADDL */
+#addl{background:#090909}
+.add-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.add-card{border:1px solid var(--line);padding:30px;position:relative;overflow:hidden;transition:border-color .3s}
+.add-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--gold),var(--gold-l));transform:scaleX(0);transform-origin:left;transition:transform .45s}
+.add-card:hover::before{transform:scaleX(1)}
+.add-card:hover{border-color:rgba(184,146,58,.2)}
+.add-n{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(184,146,58,.1);line-height:1;margin-bottom:12px}
+.add-ttl{font-family:'Cormorant Garamond',serif;font-size:1.03rem;font-weight:700;margin-bottom:7px}
+.add-desc{font-size:.77rem;line-height:1.82;color:var(--dust);margin-bottom:18px}
+.add-link{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:.58rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(184,146,58,.25);padding-bottom:3px;transition:gap .3s}
+.add-link:hover{gap:14px}
+/* CONTACT */
+#contact{background:var(--ink)}
+.contact-cols{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:stretch}
+.contact-h{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,5vw,66px);font-weight:700;line-height:.9;letter-spacing:-.025em;margin-bottom:42px}
+.contact-h i{font-style:italic;color:var(--gold)}
+.c-rows{display:flex;flex-direction:column}
+.c-row{display:flex;align-items:center;gap:20px;padding:20px 0;border-bottom:1px solid var(--line)}
+.c-row:first-child{border-top:1px solid var(--line)}
+.c-ico{width:36px;height:36px;border:1px solid rgba(184,146,58,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-ico svg{width:13px;height:13px;fill:var(--gold)}
+.c-lbl{font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dust);margin-bottom:3px}
+.c-val{font-family:'Cormorant Garamond',serif;font-size:.94rem;font-weight:600}
+.c-val a{color:var(--paper);text-decoration:none;transition:color .3s}
+.c-val a:hover{color:var(--gold)}
+.contact-photo{align-self:stretch;position:relative}
+.contact-photo img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;filter:grayscale(20%);display:block}
+.contact-photo::before{content:'';position:absolute;top:-14px;left:-14px;right:14px;bottom:14px;border:1px solid rgba(184,146,58,.16);z-index:-1}
+footer{background:#060606;padding:24px 56px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(245,240,235,.04)}
+.foot-l{font-family:'Cormorant Garamond',serif;font-size:.8rem;color:var(--dust);font-weight:600}
+.foot-r{font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(158,148,136,.3)}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.rv.in{opacity:1;transform:translateY(0)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:var(--gold)}
+@media(max-width:960px){
+  #hero{grid-template-columns:1fr}.hero-r{display:none}
+  nav{padding:14px 20px}.nav-links{display:none}
+  .wrap{padding:0 22px}
+  .about-cols,.edu-row,.skills-cols,.exp-grid,.contact-cols,.brand-top{grid-template-columns:1fr}
+  .proj-grid,.c-grid,.brand-grid,.add-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:520px){.proj-grid,.c-grid,.brand-grid,.add-grid{grid-template-columns:1fr}}
 
-   
+#dl-fab{position:fixed;bottom:28px;right:192px;z-index:6000;background:#111;color:#b8923a;border:1px solid rgba(184,146,58,.45);padding:14px 22px;font-family:'DM Sans',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:all .25s}
+#dl-fab:hover{background:rgba(184,146,58,.12);border-color:#b8923a;transform:translateY(-2px)}
+</style>
+</head>
+<body id="artifacts-component-root-html">
+<div id="cur" style="left: 476px; top: 675px; transform: translate(-50%, -50%) scale(1.5);"></div>
+<div id="ring" style="left: 477.472px; top: 674.854px; width: 50px; height: 50px;"></div>
+<div id="flash" style="opacity: 0;">✓ Downloaded successfully!</div>
+<button id="dl-fab" onclick="downloadPortfolio()">⬇ Download</button>
+<button id="edit-fab" onclick="togglePanel()">✏ Edit Portfolio</button>
+
+<!-- EDIT PANEL -->
+<div id="edit-panel" class="">
+<div class="ep-hd"><h3>✏ Edit Portfolio</h3><button onclick="togglePanel()">✕</button></div>
+<div class="ep-body">
+<p class="ep-note">All content is pre-filled. Edit any text or paste new links, then click <strong style="color:var(--gold)">Apply</strong>. Upload photos from your device using the 📷 buttons.</p>
+
+<!-- HERO -->
+<div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>🏠 Hero / Cover</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
+<div class="ep-f"><label class="ep-lbl">Full Name</label><input class="ep-inp" id="e-name" value="Pooja Tanwer"></div>
+<div class="ep-f"><label class="ep-lbl">Role</label><input class="ep-inp" id="e-role" value="Creative Director"></div>
+<div class="ep-f"><label class="ep-lbl">Kicker Line</label><input class="ep-inp" id="e-kicker" value="Creative Director · Bengaluru, India"></div>
+<div class="ep-f"><label class="ep-lbl">Tagline Pills (separate with |)</label><input class="ep-inp" id="e-tagline" value="YouTube-First Content|Kids &amp; Creator Formats|Short-Form Strategy"></div>
+<div class="ep-divider"></div>
+<div class="ep-f"><label class="ep-lbl">Stat 1 Number</label><input class="ep-inp" id="s1n" value="16M+"></div>
+<div class="ep-f"><label class="ep-lbl">Stat 1 Label</label><input class="ep-inp" id="s1l" value="Subscribers Grown"></div>
+<div class="ep-f"><label class="ep-lbl">Stat 2 Number</label><input class="ep-inp" id="s2n" value="1B+"></div>
+<div class="ep-f"><label class="ep-lbl">Stat 2 Label</label><input class="ep-inp" id="s2l" value="Views Generated"></div>
+<div class="ep-f"><label class="ep-lbl">Stat 3 Number</label><input class="ep-inp" id="s3n" value="4+"></div>
+<div class="ep-f"><label class="ep-lbl">Stat 3 Label</label><input class="ep-inp" id="s3l" value="Channels Scaled"></div>
+<div class="ep-f"><label class="ep-lbl">Stat 4 Number</label><input class="ep-inp" id="s4n" value="300K+"></div>
+<div class="ep-f"><label class="ep-lbl">Stat 4 Label</label><input class="ep-inp" id="s4l" value="Built from Zero"></div>
+<div class="ep-divider"></div>
+<div class="ep-f"><label class="ep-lbl">Hero Photo (right side)</label><label class="ep-file-lbl" for="f-hero">📷 Upload Hero Photo</label><input type="file" class="ep-file" id="f-hero" accept="image/*" onchange="uploadDirect(this,'hero-photo-img')"></div>
+<button class="ep-apply" onclick="applyHero()">Apply Hero</button>
+</div></div>
+
+<!-- ABOUT -->
+<div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>👤 About / Introduction</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
+<div class="ep-f"><label class="ep-lbl">About Photo</label><label class="ep-file-lbl" for="f-about">📷 Upload About Photo</label><input type="file" class="ep-file" id="f-about" accept="image/*" onchange="uploadDirect(this,'about-img')"></div>
+<div class="ep-f"><label class="ep-lbl">Pull Quote</label><textarea class="ep-ta" id="e-pull">Creative Director specializing in YouTube-first and short-form content strategy — where data meets storytelling.</textarea></div>
+<div class="ep-f"><label class="ep-lbl">Body Text</label><textarea class="ep-ta" id="e-body" style="min-height:90px">Experienced in building scalable content systems, leading full video production cycles, and shaping high-retention kids' and creator-led formats. With a track record spanning 16M+ subscribers and over 1 billion views generated, Pooja brings both creative vision and operational discipline to produce content that truly performs at scale.</textarea></div>
+<button class="ep-apply" onclick="applyAbout()">Apply About</button>
+</div></div>
+
+<!-- CHANNELS -->
+<div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>📺 YouTube Channels</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
+<div class="ep-grp"><span class="ep-grp-lbl">Channel 1</span>
+<div class="ep-f"><label class="ep-lbl">Name</label><input class="ep-inp" id="ch1n" value="BabyBillion Preschool"></div>
+<div class="ep-f"><label class="ep-lbl">URL</label><input class="ep-inp" id="ch1u" value="https://www.youtube.com/@BabyBillion.Preschoool"></div>
+<div class="ep-f"><label class="ep-lbl">Count</label><input class="ep-inp" id="ch1c" value="16M+"></div>
+<div class="ep-f"><label class="ep-lbl">Description</label><textarea class="ep-ta" id="ch1d">Part of the core team that scaled India's #1 kids' channel from ~4M to 16M+ subscribers — generating 1.5 billion monthly views.</textarea></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Channel 2</span>
+<div class="ep-f"><label class="ep-lbl">Name</label><input class="ep-inp" id="ch2n" value="BabyBillion"></div>
+<div class="ep-f"><label class="ep-lbl">URL</label><input class="ep-inp" id="ch2u" value="https://www.youtube.com/@BabyBillion"></div>
+<div class="ep-f"><label class="ep-lbl">Count</label><input class="ep-inp" id="ch2c" value="~2M"></div>
+<div class="ep-f"><label class="ep-lbl">Description</label><textarea class="ep-ta" id="ch2d">English-language kids' channel — supported creative strategy, format design, and full content pipeline.</textarea></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Channel 3</span>
+<div class="ep-f"><label class="ep-lbl">Name</label><input class="ep-inp" id="ch3n" value="BillionBuilders"></div>
+<div class="ep-f"><label class="ep-lbl">URL</label><input class="ep-inp" id="ch3u" value="https://www.youtube.com/@BillionBuilders"></div>
+<div class="ep-f"><label class="ep-lbl">Count</label><input class="ep-inp" id="ch3c" value="~1M"></div>
+<div class="ep-f"><label class="ep-lbl">Description</label><textarea class="ep-ta" id="ch3d">Built the channel from launch to ~1M followers — leading creative strategy and production pipeline from day one.</textarea></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Channel 4</span>
+<div class="ep-f"><label class="ep-lbl">Name</label><input class="ep-inp" id="ch4n" value="Oshmin (Rakesh Chandra)"></div>
+<div class="ep-f"><label class="ep-lbl">URL</label><input class="ep-inp" id="ch4u" value="https://www.youtube.com/results?search_query=Oshmin+Rakesh+Chandra+philosopher"></div>
+<div class="ep-f"><label class="ep-lbl">Count</label><input class="ep-inp" id="ch4c" value="300K+"></div>
+<div class="ep-f"><label class="ep-lbl">Description</label><textarea class="ep-ta" id="ch4d">Developed motivational &amp; spiritual content strategy for Indian philosopher Rakesh Chandra — growing from 0 to 300K+ followers.</textarea></div></div>
+<button class="ep-apply" onclick="applyChannels()">Apply Channels</button>
+</div></div>
+
+<!-- KEY PROJECTS -->
+<div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>🎬 Key Projects (3 cards)</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
+<div class="ep-grp"><span class="ep-grp-lbl">Project 1</span>
+<div class="ep-f"><label class="ep-lbl">Badge</label><input class="ep-inp" id="p1b" value="★ 1 Billion Views"></div>
+<div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="p1t" value="Kids Learn To Share Cookies"></div>
+<div class="ep-f"><label class="ep-lbl">Subtitle</label><input class="ep-inp" id="p1s" value="BabyBillion Preschool · YouTube Short"></div>
+<div class="ep-f"><label class="ep-lbl">URL</label><input class="ep-inp" id="p1u" value="https://www.youtube.com/@BabyBillionn/shorts"></div>
+<div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-p1">📷 Upload</label><input type="file" class="ep-file" id="f-p1" accept="image/*" onchange="uploadDirect(this,'proj-img-1')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Project 2</span>
+<div class="ep-f"><label class="ep-lbl">Badge</label><input class="ep-inp" id="p2b" value="Learning Content"></div>
+<div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="p2t" value="Kids Learn About Pool Safety"></div>
+<div class="ep-f"><label class="ep-lbl">Subtitle</label><input class="ep-inp" id="p2s" value="BabyBillion Preschool · Educational Short"></div>
+<div class="ep-f"><label class="ep-lbl">URL</label><input class="ep-inp" id="p2u" value="https://www.youtube.com/@BabyBillion.Preschoool"></div>
+<div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-p2">📷 Upload</label><input type="file" class="ep-file" id="f-p2" accept="image/*" onchange="uploadDirect(this,'proj-img-2')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Project 3</span>
+<div class="ep-f"><label class="ep-lbl">Badge</label><input class="ep-inp" id="p3b" value="Infotainment"></div>
+<div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="p3t" value="Kids Saved Uncle Sam"></div>
+<div class="ep-f"><label class="ep-lbl">Subtitle</label><input class="ep-inp" id="p3s" value="BabyBillion Preschool × KidZania Mumbai"></div>
+<div class="ep-f"><label class="ep-lbl">URL</label><input class="ep-inp" id="p3u" value="https://www.youtube.com/@BabyBillion.Preschoool"></div>
+<div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-p3">📷 Upload</label><input type="file" class="ep-file" id="f-p3" accept="image/*" onchange="uploadDirect(this,'proj-img-3')"></div></div>
+<button class="ep-apply" onclick="applyProjects()">Apply Projects</button>
+</div></div>
+
+<!-- CREATIVE -->
+<div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>🎵 Creative Projects (8 cards)</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
+<div class="ep-grp"><span class="ep-grp-lbl">Song/Film 1</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="cr0t" value="Mere Badshah"></div><div class="ep-f"><label class="ep-lbl">Artist</label><input class="ep-inp" id="cr0a" value="ft. Tarun Namdev, Varsha Chaudhary"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="cr0u" value="https://www.youtube.com/results?search_query=Mere+Badshah+Tarun+Namdev+Varsha+Chaudhary"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-cr0">📷 Upload</label><input type="file" class="ep-file" id="f-cr0" accept="image/*" onchange="uploadDirect(this,'ci-0')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Song/Film 2</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="cr1t" value="Sabko Ayodhya Chalna Hai"></div><div class="ep-f"><label class="ep-lbl">Artist</label><input class="ep-inp" id="cr1a" value="Anup Jalota, Rudra Kumar"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="cr1u" value="https://www.youtube.com/results?search_query=Sabko+Ayodhya+Chalna+Hai+Anup+Jalota"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-cr1">📷 Upload</label><input type="file" class="ep-file" id="f-cr1" accept="image/*" onchange="uploadDirect(this,'ci-1')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Song/Film 3</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="cr2t" value="Main Tumse Keh Dunga"></div><div class="ep-f"><label class="ep-lbl">Artist</label><input class="ep-inp" id="cr2a" value="ft. Rachit Rojha, Sibbu Giri"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="cr2u" value="https://www.youtube.com/results?search_query=Main+Tumse+Keh+Dunga+Rachit+Rojha"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-cr2">📷 Upload</label><input type="file" class="ep-file" id="f-cr2" accept="image/*" onchange="uploadDirect(this,'ci-2')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Song/Film 4</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="cr3t" value="Shri Ram Ji Aaye Hain"></div><div class="ep-f"><label class="ep-lbl">Artist</label><input class="ep-inp" id="cr3a" value="Udit Narayan &amp; Ayushi Sharma"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="cr3u" value="https://www.youtube.com/results?search_query=Shri+Ram+Ji+Aaye+Hain+Udit+Narayan"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-cr3">📷 Upload</label><input type="file" class="ep-file" id="f-cr3" accept="image/*" onchange="uploadDirect(this,'ci-3')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Song/Film 5</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="cr4t" value="Awadhpuri"></div><div class="ep-f"><label class="ep-lbl">Artist</label><input class="ep-inp" id="cr4a" value="Udit Narayan · Punit Dharma Pav"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="cr4u" value="https://www.youtube.com/results?search_query=Awadhpuri+Udit+Narayan"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-cr4">📷 Upload</label><input type="file" class="ep-file" id="f-cr4" accept="image/*" onchange="uploadDirect(this,'ci-4')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Song/Film 6</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="cr5t" value="Aaya Hai Pawan Ram Varsh"></div><div class="ep-f"><label class="ep-lbl">Artist</label><input class="ep-inp" id="cr5a" value="Sharad &amp; Ayushi Sharma"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="cr5u" value="https://www.youtube.com/results?search_query=Aaya+Hai+Pawan+Ram+Varsh"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-cr5">📷 Upload</label><input type="file" class="ep-file" id="f-cr5" accept="image/*" onchange="uploadDirect(this,'ci-5')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Song/Film 7</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="cr6t" value="Jai Mahotsav 2020–21"></div><div class="ep-f"><label class="ep-lbl">Artist</label><input class="ep-inp" id="cr6a" value="Brand Film &amp; Event Promo"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="cr6u" value="https://www.youtube.com/results?search_query=Jai+Mahotsav+2020+Hanuwantia"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-cr6">📷 Upload</label><input type="file" class="ep-file" id="f-cr6" accept="image/*" onchange="uploadDirect(this,'ci-6')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Song/Film 8</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="cr7t" value="Artist Log"></div><div class="ep-f"><label class="ep-lbl">Artist</label><input class="ep-inp" id="cr7a" value="Theatre Documentary"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="cr7u" value="https://www.youtube.com/results?search_query=Artist+Log+Theatre+Documentary"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-cr7">📷 Upload</label><input type="file" class="ep-file" id="f-cr7" accept="image/*" onchange="uploadDirect(this,'ci-7')"></div></div>
+
+<button class="ep-apply" onclick="applyCreative()">Apply Creative</button>
+</div></div>
+
+<!-- BRAND -->
+<div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>🤝 Brand Integrations (3 cards)</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
+<div class="ep-grp"><span class="ep-grp-lbl">Brand Card 1</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="br0n" value="Kids Deliver Pizza On Time"></div><div class="ep-f"><label class="ep-lbl">Subtitle</label><input class="ep-inp" id="br0s" value="Brand integration · Kids' narrative short"></div><div class="ep-f"><label class="ep-lbl">Badge</label><input class="ep-inp" id="br0b" value="R For Rabbit"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="br0u" value="https://www.youtube.com/@BabyBillion.Preschoool"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-br0">📷 Upload</label><input type="file" class="ep-file" id="f-br0" accept="image/*" onchange="uploadDirect(this,'bi-0')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Brand Card 2</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="br1n" value="Kids Forget Their Little Joys Gummies"></div><div class="ep-f"><label class="ep-lbl">Subtitle</label><input class="ep-inp" id="br1s" value="Brand integration · Educational narrative"></div><div class="ep-f"><label class="ep-lbl">Badge</label><input class="ep-inp" id="br1b" value="Little Joys"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="br1u" value="https://www.youtube.com/@BabyBillion.Preschoool"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-br1">📷 Upload</label><input type="file" class="ep-file" id="f-br1" accept="image/*" onchange="uploadDirect(this,'bi-1')"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Brand Card 3</span><div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="br2n" value="Kids Find The Cookie Thief"></div><div class="ep-f"><label class="ep-lbl">Subtitle</label><input class="ep-inp" id="br2s" value="Brand integration · Detective narrative"></div><div class="ep-f"><label class="ep-lbl">Badge</label><input class="ep-inp" id="br2b" value="R For Rabbit"></div><div class="ep-f"><label class="ep-lbl">YouTube URL</label><input class="ep-inp" id="br2u" value="https://www.youtube.com/@BabyBillion.Preschoool"></div><div class="ep-f"><label class="ep-lbl">Thumbnail</label><label class="ep-file-lbl" for="f-br2">📷 Upload</label><input type="file" class="ep-file" id="f-br2" accept="image/*" onchange="uploadDirect(this,'bi-2')"></div></div>
+
+<button class="ep-apply" onclick="applyBrand()">Apply Brand</button>
+</div></div>
+
+<!-- ADDITIONAL WORK -->
+<div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>📁 Additional Work</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
+<div class="ep-grp"><span class="ep-grp-lbl">Work 1</span>
+<div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="w1t" value="Malabar Rivaazz Fashion"></div>
+<div class="ep-f"><label class="ep-lbl">Description</label><textarea class="ep-ta" id="w1d">Creative direction and fashion photography for Malabar Rivaazz's Indian ethnic wear collection. Full production — concept, styling, shoot, and post-production.</textarea></div>
+<div class="ep-f"><label class="ep-lbl">Google Drive URL</label><input class="ep-inp" id="w1u" value="https://drive.google.com/drive/folders/1LCB0B1855IWI2kJFQNLxXILE1S-E7hNP"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Work 2</span>
+<div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="w2t" value="Product Shoot — Potent Ayur"></div>
+<div class="ep-f"><label class="ep-lbl">Description</label><textarea class="ep-ta" id="w2d">Commercial product photography for Potent Ayur Ayurvedic brand. End-to-end creative direction from concept through to final delivery.</textarea></div>
+<div class="ep-f"><label class="ep-lbl">Google Drive URL</label><input class="ep-inp" id="w2u" value="https://drive.google.com/drive/folders/1Drr0G8PP59LfHk_bD-kU9axLDq3TbRO4"></div></div>
+<div class="ep-grp"><span class="ep-grp-lbl">Work 3</span>
+<div class="ep-f"><label class="ep-lbl">Title</label><input class="ep-inp" id="w3t" value="Manik Jewelers"></div>
+<div class="ep-f"><label class="ep-lbl">Description</label><textarea class="ep-ta" id="w3d">Jewellery campaign photography and creative direction — translating brand heritage into compelling visual storytelling.</textarea></div>
+<div class="ep-f"><label class="ep-lbl">Google Drive URL</label><input class="ep-inp" id="w3u" value="https://drive.google.com/drive/u/0/folders/1r2V1Z2bHb4LFHS27PZjA_4mVz_E7pX9h"></div></div>
+<button class="ep-apply" onclick="applyWork()">Apply Work</button>
+</div></div>
+
+<!-- CONTACT -->
+<div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>📞 Contact Info</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
+<div class="ep-f"><label class="ep-lbl">Phone</label><input class="ep-inp" id="e-phone" value="+91 9131599585"></div>
+<div class="ep-f"><label class="ep-lbl">Email</label><input class="ep-inp" id="e-email" value="pooja.tanwer0126@gmail.com"></div>
+<div class="ep-f"><label class="ep-lbl">Location</label><input class="ep-inp" id="e-city" value="Bengaluru, India"></div>
+<div class="ep-f"><label class="ep-lbl">Contact Photo</label><label class="ep-file-lbl" for="f-contact">📷 Upload Contact Photo</label><input type="file" class="ep-file" id="f-contact" accept="image/*" onchange="uploadDirect(this,'contact-photo-img')"></div>
+<button class="ep-apply" onclick="applyContact()">Apply Contact</button>
+</div></div>
+
+</div></div>
+<!-- END PANEL -->
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav>
+<div class="nav-brand" id="nav-name">Pooja Tanwer</div>
+<ul class="nav-links">
+<li><a href="#about">About</a></li><li><a href="#edu">Education</a></li>
+<li><a href="#skills">Skills</a></li><li><a href="#exp">Experience</a></li>
+<li><a href="#proj">Projects</a></li><li><a href="#creative">Creative</a></li>
+<li><a href="#brand">Brand</a></li><li><a href="#addl">Work</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</nav>
+
 <!-- ═══════════ HERO ═══════════ -->
 <section id="hero">
 <div class="hero-word">PORTFOLIO</div>
@@ -509,7 +879,11 @@ body{background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;o
 <div class="foot-r">© 2025 All Rights Reserved</div>
 </footer>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-
+function togglePanel(){
+  var p=document.getElementById('edit-panel');
+  var o=p.classList.toggle('open');
+  document.getElementById('edit-fab').textContent=o?'✕ Close Editor':'✏ Edit Portfolio';
+}
 function acc(h){h.classList.toggle('open');h.nextElementSibling.classList.toggle('show');}
 function flash(m){var e=document.getElementById('flash');e.textContent=m;e.style.opacity='1';setTimeout(function(){e.style.opacity='0';},2400);}
 function uploadDirect(inp,tid){
@@ -710,3 +1084,16 @@ document.querySelectorAll('.exp-card').forEach(function(card){
 })();
 </script>
 
+<!-- AUTO-SAVE BADGE -->
+<style>
+#autosave-badge{
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  background:rgba(184,146,58,.95); color:#0a0a0a;
+  font:600 12px/1 'Montserrat',sans-serif; letter-spacing:.05em;
+  padding:7px 16px; border-radius:20px; z-index:9999;
+  pointer-events:none; opacity:0; transition:opacity .4s;
+}
+</style>
+<div id="autosave-badge">💾 Auto-saving…</div>
+</body>
+</html>
