@@ -523,13 +523,6 @@ footer{background:#060606;padding:24px 56px;display:flex;align-items:center;just
 <div id="ring" style="left: 477.472px; top: 674.854px; width: 50px; height: 50px;"></div>
 <div id="flash" style="opacity: 0;">✓ Downloaded successfully!</div>
 <button id="dl-fab" onclick="downloadPortfolio()">⬇ Download</button>
-<button id="edit-fab" onclick="togglePanel()">✏ Edit Portfolio</button>
-
-<!-- EDIT PANEL -->
-<div id="edit-panel" class="">
-<div class="ep-hd"><h3>✏ Edit Portfolio</h3><button onclick="togglePanel()">✕</button></div>
-<div class="ep-body">
-<p class="ep-note">All content is pre-filled. Edit any text or paste new links, then click <strong style="color:var(--gold)">Apply</strong>. Upload photos from your device using the 📷 buttons.</p>
 
 <!-- HERO -->
 <div class="ep-acc"><div class="ep-acc-hd open" onclick="acc(this)"><span>🏠 Hero / Cover</span><span class="ep-arr">▼</span></div><div class="ep-acc-bd show">
@@ -879,11 +872,7 @@ footer{background:#060606;padding:24px 56px;display:flex;align-items:center;just
 <div class="foot-r">© 2025 All Rights Reserved</div>
 </footer>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-function togglePanel(){
-  var p=document.getElementById('edit-panel');
-  var o=p.classList.toggle('open');
-  document.getElementById('edit-fab').textContent=o?'✕ Close Editor':'✏ Edit Portfolio';
-}
+
 function acc(h){h.classList.toggle('open');h.nextElementSibling.classList.toggle('show');}
 function flash(m){var e=document.getElementById('flash');e.textContent=m;e.style.opacity='1';setTimeout(function(){e.style.opacity='0';},2400);}
 function uploadDirect(inp,tid){
